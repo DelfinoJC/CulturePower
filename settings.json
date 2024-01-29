@@ -1,0 +1,6 @@
+{
+    "editor.formatOnSave": true,
+    "workbench.colorTheme": "Default Dark Modern",
+    "editor.minimap.enabled": false,
+    "workbench.iconTheme": "vscode-icons"
+}
