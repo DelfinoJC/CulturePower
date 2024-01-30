@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose"
-import { type IProduct } from "../entities/IProduct"
+import { mongoose } from '../database'
+import { Schema} from "mongoose"
 
-const ProductSchema = new Schema<IProduct>({
+const ProductSchema = new Schema({
   name: {
     type: String, 
     require: true
@@ -21,4 +21,4 @@ const ProductSchema = new Schema<IProduct>({
     require: true}
 })
 
-export const Product = model<IProduct>("Product", ProductSchema)
+export const Product = mongoose.model("Product", ProductSchema)

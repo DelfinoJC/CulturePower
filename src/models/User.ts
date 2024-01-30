@@ -1,7 +1,7 @@
-import { Schema, model} from "mongoose";
-import { type IUser } from "../entities/IUser";
+import { mongoose } from "../database"
+import { Schema} from "mongoose";
 
-const UserSchema = new Schema<IUser>({
+const UserSchema = new Schema({
 
   name: {
     type: String,
@@ -13,6 +13,7 @@ const UserSchema = new Schema<IUser>({
 
   password: {
     type: String,
+    min: 8,
     require: true},
 
     
@@ -31,4 +32,4 @@ const UserSchema = new Schema<IUser>({
     }
 })
 
-export const User = model<IUser>("User", UserSchema)
+export const User = mongoose.model("User", UserSchema)

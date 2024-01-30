@@ -1,8 +1,8 @@
-import { Schema, model } from "mongoose";
-import { database } from '../database'
-import { type  IAdm } from "../entities/IAdm";
+import { mongoose} from "../database";
+import { Schema } from "mongoose";
+// import { type  IAdm } from "../entities/IAdm";
 
-const AdmSchema = new Schema<IAdm>({
+const AdmSchema = new Schema({
   name: {
     type: String,
     require: true},
@@ -20,4 +20,4 @@ const AdmSchema = new Schema<IAdm>({
     }
 })
 
-export const Adm = model<IAdm>("Adm", AdmSchema)
+export const Adm = mongoose.model("Adm", AdmSchema)
