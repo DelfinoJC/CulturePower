@@ -1,3 +1,5 @@
+import 'dotenv'
+
 export const serverConfig = {
-  port: 3333
+  port: process.env.PORT
 }
