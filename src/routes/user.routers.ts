@@ -2,12 +2,12 @@ import { Router } from "express";
 import { hash } from 'bcrypt';
 import { User } from "../models/User";
 import * as Yup from 'yup'
-// import { mongoose } from '../database'
+import { ValidationError } from "yup";
+import { upload } from "../middleware/upload";
 
 const routers = Router()
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-routers.post('/', async (req, res) => {
+routers.post('/',  async (req, res) => {
 
   const userQuery = Yup.object({
     name: Yup.string().required(),
@@ -18,6 +18,7 @@ routers.post('/', async (req, res) => {
 
   try{
     const user = await userQuery.validate(req.body)
+
     const existingEmail = await User.findOne({ email: user.email})
     const existingName = await User.findOne({name: user.name})
 
@@ -33,8 +34,10 @@ routers.post('/', async (req, res) => {
     const newUser = await new User(user).save()
     res.status(201).json(newUser)
 
-  } catch(errors) {
-    res.status(400).send({validationErros: errors})
+  } catch(error) {
+    console.log("deu erro")
+    const { name, message, errors } = error as ValidationError
+      res.status(406).send({ name, message, errors })
   }
 
 })  
