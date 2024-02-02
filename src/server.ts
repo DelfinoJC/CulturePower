@@ -1,12 +1,6 @@
+import app from './app'
 import { serverConfig } from './config/server'
-import express from 'express'
-import router from './routes'
 
-const server = express()
-server.use(express.json())
-
-server.use(router)
-
-server.listen(serverConfig.port, () => {
+app.listen(serverConfig.port, () => {
   console.log(`Server running on port ${serverConfig.port}`)
 })
