@@ -1,25 +1,25 @@
-import { mongoose } from "../database"
-import { Schema} from "mongoose";
+import { mongoose } from "../database/index"
 
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
 
   name: {
     type: String,
-    require: true},
+    required: true},
 
   email: {
     type: String,
-    require: true},
+    unique: true,
+    required: true},
 
   password: {
     type: String,
     min: 8,
-    require: true},
+    required: true},
 
     
   photo: {
     type: String,
-    require: false
+    required: false
   },
   
     jewelry: {

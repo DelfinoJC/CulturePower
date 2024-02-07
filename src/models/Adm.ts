@@ -1,8 +1,7 @@
 import { mongoose} from "../database";
-import { Schema } from "mongoose";
 // import { type  IAdm } from "../entities/IAdm";
 
-const AdmSchema = new Schema({
+const AdmSchema = new mongoose.Schema({
   name: {
     type: String,
     require: true},
