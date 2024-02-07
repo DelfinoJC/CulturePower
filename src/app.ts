@@ -1,9 +1,11 @@
 import express from 'express'
 import router from './routes'
+import { logger } from './middleware/logger'
 
-const app = express()
-app.use(express.json())
+const server = express()
 
-app.use(router)
+server.use(express.json())
+server.use(logger)
+server.use(router)
 
-export default app
+export default server
