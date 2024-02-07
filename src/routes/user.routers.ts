@@ -3,7 +3,7 @@ import { hash } from 'bcrypt';
 import { User } from "../models/User";
 import * as Yup from 'yup'
 import { ValidationError } from "yup";
-import { upload } from "../middleware/upload";
+// import { upload } from "../middleware/upload";
 
 const routers = Router()
 
