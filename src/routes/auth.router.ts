@@ -15,15 +15,15 @@ router.post("/", async (req, res) => {
   })
 
   try{
-    const { email, password } = await authUser.validate(req.body, { abortEarly: false })
+    const { email, password } = await authUser.validate(req.body)
     const user = await User.findOne({email})
     if (!user){
-      return res.send({messege: `User with email ${email} not exist`})
+      return res.send({messege: `User invalidate`})
     }
 
     const passwordCompare = await compare(password, user.password)
     if(!passwordCompare) {
-      return res.send({messege: `Password invalidate`})
+      return res.send({messege: `User invalidate`})
     }
 
     user.password = ''
@@ -36,7 +36,6 @@ router.post("/", async (req, res) => {
     const { name, message, errors } = error as ValidationError
       res.status(406).send({ name, message, errors })
   }
-
 })
 
 export default router
