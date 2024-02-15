@@ -1,9 +1,11 @@
 import { Router } from 'express'
 import * as Yup from 'yup'
+
 import { Product } from '../models/Product'
 import * as productSchema  from '../schema/productSchema'
+
 import validateRouter from '../middleware/validateRouter'
-import { auth } from '../middleware/admAuth'
+import { auth } from '../middleware/admAuth.middleware'
 
 const routers = Router()
 
@@ -21,6 +23,8 @@ routers.post('/', validateRouter(productSchema.CreateProducts.schema), auth, asy
     const { errors } = error as Yup.ValidationError;
     res.status(401).send({ validateError: errors })
   }
-})
+}) 
+
+
 
 export default routers 
