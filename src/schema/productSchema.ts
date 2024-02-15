@@ -3,7 +3,7 @@ import { TypedRequest } from '../util/typedRequest'
 
 export const productSchema = Yup.object({
   name: Yup.string().required('Name has required'),
-  value: Yup.number().required('Value has required'),
+  price: Yup.number().required('Value has required'),
   amount: Yup.number().required('Quantity has required').default(0),
   description: Yup.string().required('Description has required'),
   photo: Yup.string(),
