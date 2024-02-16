@@ -9,6 +9,10 @@ export const userSchema = Yup.object({
   jewelry: Yup.string(),
 })
 
+export const userSchemaParam = Yup.object({
+  id: Yup.string().required()
+})
+
 export namespace CreateUsers {
   export type BodyType = TypedRequest<typeof userSchema>
   export const schema = Yup.object().shape({ body: userSchema })

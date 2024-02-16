@@ -7,7 +7,7 @@ import productRouters from './product.router'
 
 const routers = Router()
 
-routers.use('/userAdmRegister', userAdmRouters)
+routers.use('/userAdmRouters', userAdmRouters)
 routers.use('/authAdm', authAdmRouter)
 
 routers.use('/authUser', authUserRouters)
