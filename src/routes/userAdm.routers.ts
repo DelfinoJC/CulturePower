@@ -1,13 +1,18 @@
 import { Router } from "express";
 import { hash } from 'bcrypt';
 import { Adm } from "../models/Adm";
+import { User } from "../models/User";
 import { ValidationError } from "yup";
 
 import * as userSchema from "../schema/userSchema";
 import validateRouter from "../middleware/validateRouter";
 import { auth } from "../middleware/admAuth.middleware";
+import { upload } from "../middleware/upload";
+
 const routers = Router()
 
+
+// create new adm [ x ]
 routers.post('/', validateRouter(userSchema.CreateUsers.schema), async (req, res) => {
 
   try{
@@ -38,20 +43,101 @@ routers.post('/', validateRouter(userSchema.CreateUsers.schema), async (req, res
 
 })  
 
-routers.get('/', auth, async (req, res) => {
+// get all User [ x ]
+routers.get('/',  auth, async (req, res) => {
   const users = await Adm.find()
   res.send(users)
 })
 
-routers.delete('/:id', validateRouter(userSchema), auth, async (req, res) => {
+// get user with id [ x ]
+routers.get('/:_id', auth, async (req, res) => {
+  const userParam = req
+  try {
+    const { _id } = userParam.params
+    const user = await User.findById(_id)
+    if (!user) {
+      return res.send({ message: `User with id ${_id} was not found!` })
+    }
+
+    console.log(user)
+    res.send(user).status(204)
+
+  } catch (error) {
+    const { errors, message } = error as ValidationError
+    res.status(400).send({ validationErrors: errors, message })
+  }
+})
+
+// upload user with id [ x ]
+routers.put('/updateUser/:id', auth, async (req, res) => {
+  try {
+    const user = req.body
+    const { id } = req.params
+    const userForUpdate = await Adm.findByIdAndUpdate(id, user).exec()
+    if (!userForUpdate) {
+      res.status(204).send({ message: `Car with id ${id} was not found!` })
+    }
+    const updatedUser = await User.findById(id).exec()
+    if (!updatedUser) {
+      res.status(204).send({ message: `Car with id ${id} was not found!` })
+      return
+    }
+
+    updatedUser.__v += 1
+    await updatedUser.save()
+    res.status(200).send(updatedUser)
+
+  } catch (error: any) {
+    console.log(error)
+    res.status(500).send(`Internal Server Error: ${error}`)
+  }
+})
+
+// upload image [ x ]
+routers.put('/uploadImage/:id', auth, upload.single('image'), async (req, res) => {
+
+  const { file }= req
+  
+  try {
+
+    const { id } = req.params
+
+    const admForUpdateImage = await Adm.findByIdAndUpdate(id, {
+      photo: file?.filename,
+    }).exec()
+
+    if (!admForUpdateImage) {
+      return res.status(204).send({ message: `User was not found!` })
+    }
+
+    const imageUpdate = await Adm.findById(id)
+    if (!imageUpdate) {
+      return res.status(204).send({ message: `User was not found!` })
+    }
+
+    await imageUpdate.save()
+    res.status(200).send(imageUpdate)
+
+  } catch (error) {
+    const { errors } = error as ValidationError
+    console.log(error)
+    res.status(400).send({ validationErrors: errors })
+  }
+
+})
+
+// delete user with id [ x ]
+routers.delete('/:id', auth, async (req, res) => {
   const userParam = req
   try {
     const { id } = userParam.params
-    const user = await Adm.findByIdAndDelete(id).exec()
+    const user = await User.findByIdAndDelete(id)
     if (!user) {
       return res.send({ message: `User with id ${id} was not found!` })
     }
-    res.sendStatus(204)
+
+    res.status(204).send({message: 'User deleted'})
+
   } catch (error) {
     const { errors, message } = error as ValidationError
     res.status(400).send({ validationErrors: errors, message })
