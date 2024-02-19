@@ -2,7 +2,7 @@ import { mongoose } from "../database/index"
 
 const UserSchema = new mongoose.Schema({
 
-  name: {
+  name: { 
     type: String,
     required: true},
 
@@ -18,13 +18,20 @@ const UserSchema = new mongoose.Schema({
 
     
   photo: {
-    type: String,
-    required: false
+    type: String
   },
   
     jewelry: {
       type: Number,
     },
+
+    products: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'Products',
+      },
+    ],
+    
 
     creatAt: {
       type: Date,

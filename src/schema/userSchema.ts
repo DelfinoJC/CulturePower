@@ -6,7 +6,7 @@ export const userSchema = Yup.object({
   email: Yup.string().required('Email has required'),
   password: Yup.string().required('Password has required'),
   photo: Yup.string(),
-  jewelry: Yup.string(),
+  jewelry: Yup.number().default(0),
 })
 
 export const userSchemaParam = Yup.object({
@@ -16,4 +16,13 @@ export const userSchemaParam = Yup.object({
 export namespace CreateUsers {
   export type BodyType = TypedRequest<typeof userSchema>
   export const schema = Yup.object().shape({ body: userSchema })
+}
+
+export namespace UpdateUser {
+  export type BodyType = TypedRequest<typeof userSchema>
+  export type ParamType = TypedRequest<typeof userSchemaParam>
+  export const schema = Yup.object().shape({
+    body: userSchema,
+    params: userSchemaParam,
+  })
 }

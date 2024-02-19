@@ -15,12 +15,12 @@ router.post("/", validateRouter(loggerSchema.CreateLogger.schema), async (req, r
 
   try{
     const { email, password } = await req.body
-    const user = await User.findOne({email})
+    const user = await User.findOne({email}).exec()
     if (!user){
       return res.send({messege: `User invalidate`})
     }
 
-    const passwordCompare = await compare(password, user.password)
+    const passwordCompare = compare(password, user.password as string)
     if(!passwordCompare) {
       return res.send({messege: `User invalidate`})
     }
@@ -32,6 +32,7 @@ router.post("/", validateRouter(loggerSchema.CreateLogger.schema), async (req, r
     res.send({user, token})
     
   } catch(error) {
+    console.log(error)
     const { name, message, errors } = error as ValidationError
       res.status(406).send({ name, message, errors })
   }
