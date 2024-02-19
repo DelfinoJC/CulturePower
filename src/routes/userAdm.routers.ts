@@ -73,13 +73,15 @@ routers.put('/updateUser/:id', auth, async (req, res) => {
   try {
     const user = req.body
     const { id } = req.params
+
     const userForUpdate = await Adm.findByIdAndUpdate(id, user).exec()
     if (!userForUpdate) {
-      res.status(204).send({ message: `Car with id ${id} was not found!` })
-    }
+      res.status(204).send({ message: `User was not found!` })
+    } 
+
     const updatedUser = await User.findById(id).exec()
     if (!updatedUser) {
-      res.status(204).send({ message: `Car with id ${id} was not found!` })
+      res.status(204).send({ message: `Error when updating` })
       return
     }
 
@@ -126,14 +128,44 @@ routers.put('/uploadImage/:id', auth, upload.single('image'), async (req, res) =
 
 })
 
-// delete user with id [ x ]
+// send gems to user [ X ]
+routers.patch('/sendGems/:id', auth, async (req, res) => {
+  
+  try{
+    const { id } = req.params
+
+    const { jewels } = req.body
+console.log(jewels)
+    const userExist = await User.findById(id)
+    if(!userExist){
+      return res.status(404).send('User was not found')
+    }
+
+    const updateOperation = userExist.jewelry === undefined || 0 ?
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    { $inc: { jewelry: jewels } } : { $set: { jewelry: userExist.jewelry += jewels } }
+
+    const updatedUser = await User.findOneAndUpdate({ _id: id }, updateOperation, { new: true })
+    if(updatedUser !== null)
+    await updatedUser.save()
+
+    console.log(updatedUser)
+    res.status(200).send(updatedUser) 
+
+  } catch(error) {
+    const { errors, message } = error as ValidationError
+    res.status(400).send({ validationErrors: errors, message })
+  }
+})
+
+// delete user with id [ X ]
 routers.delete('/:id', auth, async (req, res) => {
   const userParam = req
   try {
     const { id } = userParam.params
     const user = await User.findByIdAndDelete(id)
     if (!user) {
-      return res.send({ message: `User with id ${id} was not found!` })
+      return res.send({ message: `User was not found!` })
     }
 
     res.status(204).send({message: 'User deleted'})

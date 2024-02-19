@@ -42,7 +42,7 @@ routers.post('/', validateRouter(userSchema.CreateUsers.schema), async (req, res
 
 }) 
 
-// recover product
+// recover product 
 routers.patch('/recoverProduct', authUser, async (req, res) => {
  try { 
   const { idUser, idProduct } = req.body
@@ -83,7 +83,7 @@ routers.patch('/recoverProduct', authUser, async (req, res) => {
 
 })
 
-// update user with id [  ]
+// update user with id [ x ]
 routers.put('/updateUser/:id', authUser, async (req, res) => {
   try {
     const user = req.body
@@ -108,7 +108,7 @@ routers.put('/updateUser/:id', authUser, async (req, res) => {
   }
 })
 
-// update image [  ]
+// update image [ x ]
 routers.put('/uploadImage/:id', authUser, upload.single('image'), async (req, res) => {
 
   const { file }= req
@@ -141,7 +141,7 @@ routers.put('/uploadImage/:id', authUser, upload.single('image'), async (req, re
 
 })
 
-// delete user with id [  ]
+// delete user with id [ x ]
 routers.delete('/:id', authUser, async (req, res) => {
   const userParam = req
   try {
